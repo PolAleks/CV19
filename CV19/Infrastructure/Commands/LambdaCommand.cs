@@ -11,6 +11,13 @@ namespace CV19.Infrastructure.Commands
     {
         private readonly Action<object> _Execute;
         private readonly Func<object, bool> _CanExecute;
+
+        /// <summary>
+        /// Конструктор для инициализации команды
+        /// </summary>
+        /// <param name="Execute">Делегат на метод для выполнения команды</param>
+        /// <param name="CanExecute">Делегат на метод проверки, может ли быть выполнена команда</param>
+        /// <exception cref="ArgumentNullException"></exception>
         public LambdaCommand(Action<object> Execute, Func<object, bool> CanExecute = null)
         {
             _Execute = Execute ?? throw new ArgumentNullException(nameof(Execute));
