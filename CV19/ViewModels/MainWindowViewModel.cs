@@ -37,6 +37,7 @@ namespace CV19.ViewModels
 
         #region Команды
 
+        // Реализация команды закрытия приложения через LambdaCommand
         #region CloseApplicationCommand
         public ICommand CloseApplicationCommand { get; }
 
@@ -53,6 +54,7 @@ namespace CV19.ViewModels
         public MainWindowViewModel()
         {
             #region Команды
+            // Создание команды на закрытие приложения через инстанцирования LambdaCommand двумя методами
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
 
             #endregion
