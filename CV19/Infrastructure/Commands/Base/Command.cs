@@ -19,8 +19,8 @@ namespace CV19.Infrastructure.Commands.Base
 
         // Когда CanExecute 
         public abstract bool CanExecute(object? parameter);
-        
-        public abstract void Execute(object? parameter)
+
+        public abstract void Execute(object? parameter);
         
     }
 }
