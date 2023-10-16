@@ -4,6 +4,6 @@
              xmlns:local="clr-namespace:CV19WPFTest"
              StartupUri="MainWindow.xaml">
     <Application.Resources>
-         
+        <ResourceDictionary Source="pack://application:,,,/MaterialDesignThemes.Wpf;component/Themes/MaterialDesignTheme.Defaults.xaml" />
     </Application.Resources>
 </Application>
