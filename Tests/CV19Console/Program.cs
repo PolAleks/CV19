@@ -27,7 +27,7 @@ internal class Program
         {
             var line = dataReader.ReadLine();
             if (string.IsNullOrEmpty(line)) continue;
-            yield return line;
+            yield return line.Replace("Korea,", "Korea -").Replace("Bonaire,", "\"Bonaire ");
         }
     }
 
@@ -41,6 +41,25 @@ internal class Program
         .Select(s => DateTime.Parse(s, CultureInfo.InvariantCulture))
         .ToArray();
 
+    /// <summary>
+    /// Метод возвращающий кортеж содержащий Страну, провинцию и массив кол-во зараженных по дням
+    /// </summary>
+    /// <returns></returns>
+    private static IEnumerable<(string Contry, string Province, int[] Counts)> GetData()
+    {
+        var lines = GetDataLines()
+           .Skip(1)
+           .Select(line => line.Split(','));
+
+        foreach (var row in lines)
+        {
+            var province = row[0].Trim();
+            var country_name = row[1].Trim(' ', '"');
+            var counts = row.Skip(4).Select(int.Parse).ToArray();
+
+            yield return (country_name, province, counts);
+        }
+    }
 
 
 
@@ -59,7 +78,12 @@ internal class Program
         //    Console.WriteLine(line);
         //}
 
-        var date = GetDates();
-        Console.WriteLine(string.Join("\r\n", date));
+        //var date = GetDates();
+        //Console.WriteLine(string.Join("\r\n", date));
+
+        var russia_data = GetData()
+               .First(v => v.Contry.Equals("Russia", StringComparison.OrdinalIgnoreCase));
+
+        Console.WriteLine(string.Join("\r\n", GetDates().Zip(russia_data.Counts, (date, count) => $"{date:dd:MM} - {count}")));
     }
 }
