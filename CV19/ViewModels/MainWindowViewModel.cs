@@ -1,8 +1,10 @@
 ﻿using CV19.Infrastructure.Commands;
+using CV19.Models;
 using CV19.ViewModels.Base;
 using System;
 using System.Collections.Generic;
 using System.Linq;
+using System.Net.NetworkInformation;
 using System.Text;
 using System.Threading.Tasks;
 using System.Windows;
@@ -12,6 +14,19 @@ namespace CV19.ViewModels
 {
     internal class MainWindowViewModel :ViewModel
     {
+        #region 
+        /// <summary>
+        /// Тестовый набор данных для визуализации графиков
+        /// </summary>
+        private IEnumerable<DataPoint> _TestDataPoints;
+
+        public IEnumerable<DataPoint> TestDataPoints 
+        {
+            get => _TestDataPoints;
+            set => Set(ref _TestDataPoints, value);
+        }
+        #endregion
+
         #region Заголовок окна
 
         private string _title = "Анализ статистики";
@@ -59,6 +74,16 @@ namespace CV19.ViewModels
 
             #endregion
 
+            var dataPoints = new List<DataPoint>((int)(360 / 0.1));
+            for (var x = 0d ; x <= 360; x += 0.1)
+            {
+                const double toRad = Math.PI / 360;
+                var y = Math.Sin(x * toRad);
+
+                dataPoints.Add(new DataPoint { XValue = x, YValue = y });
+            }
+
+            TestDataPoints = dataPoints;
         }
     }
 }
