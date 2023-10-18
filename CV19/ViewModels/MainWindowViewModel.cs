@@ -12,15 +12,29 @@ using System.Windows.Input;
 
 namespace CV19.ViewModels
 {
-    internal class MainWindowViewModel :ViewModel
+    internal class MainWindowViewModel : ViewModel
     {
-        #region 
+        #region Номер выбранной вкладки
+
+        private int _selectedPageIndex;
+
+        public int SelectedPageIndex
+        {
+            get => _selectedPageIndex;
+            set => Set(ref _selectedPageIndex, value);
+        }
+
+        #endregion
+
+
+        #region Тестовый набор данных для визуализации графиков
+
         /// <summary>
         /// Тестовый набор данных для визуализации графиков
         /// </summary>
         private IEnumerable<DataPoint> _TestDataPoints;
 
-        public IEnumerable<DataPoint> TestDataPoints 
+        public IEnumerable<DataPoint> TestDataPoints
         {
             get => _TestDataPoints;
             set => Set(ref _TestDataPoints, value);
@@ -64,6 +78,20 @@ namespace CV19.ViewModels
         private bool CanCloseApplicationCommandExecute(object p) => true;
         #endregion
 
+        #region
+
+        public ICommand ChangeTabIndexCommand { get; }
+
+        private bool CanChangeTabIndexCommandExecute(object p) => _selectedPageIndex >=0;
+        
+        private void OnChangeTabIndexCommandExecuted(object p)
+        {
+            if (p is null) return;
+            SelectedPageIndex += Convert.ToInt32(p);
+        }
+
+        #endregion
+
         #endregion
 
         public MainWindowViewModel()
@@ -72,10 +100,13 @@ namespace CV19.ViewModels
             // Создание команды на закрытие приложения через инстанцирования LambdaCommand двумя методами
             CloseApplicationCommand = new LambdaCommand(OnCloseApplicationCommandExecuted, CanCloseApplicationCommandExecute);
 
+            // Команда на переключение между вкладками
+            ChangeTabIndexCommand = new LambdaCommand(OnChangeTabIndexCommandExecuted, CanChangeTabIndexCommandExecute);
+
             #endregion
 
             var dataPoints = new List<DataPoint>((int)(360 / 0.1));
-            for (var x = 0d ; x <= 360; x += 0.1)
+            for (var x = 0d; x <= 360; x += 0.1)
             {
                 const double toRad = Math.PI / 180;
                 var y = Math.Sin(x * toRad);
