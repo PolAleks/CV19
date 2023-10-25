@@ -20,6 +20,16 @@ namespace CV19.ViewModels
 
         public ObservableCollection<Group> Groups { get; set; }
 
+        public object[] CompositeCollection { get; set; }
+
+        #region Выбранный непонятный элемент
+
+        private object _SelectedCompositeValue;
+
+        public object SelectedCompositeValue { get => _SelectedCompositeValue; set => Set(ref _SelectedCompositeValue, value); }
+
+        #endregion
+
         #region Выбранная группа
 
         private Group _selectedGroup;
@@ -152,7 +162,14 @@ namespace CV19.ViewModels
 
             Groups = new ObservableCollection<Group>(groups);
 
+            var dataList = new List<object>();
+            dataList.Add("Hello world");
+            dataList.Add(42);
+            var group = Groups[1];
+            dataList.Add(group);
+            dataList.Add(group.Students[0]);
 
+            CompositeCollection = dataList.ToArray();
         }
     }
 }
