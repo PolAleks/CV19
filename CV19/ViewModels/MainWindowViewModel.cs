@@ -1,8 +1,10 @@
 ﻿using CV19.Infrastructure.Commands;
 using CV19.Models;
+using CV19.Models.Decanat;
 using CV19.ViewModels.Base;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Net.NetworkInformation;
 using System.Text;
@@ -14,6 +16,10 @@ namespace CV19.ViewModels
 {
     internal class MainWindowViewModel : ViewModel
     {
+        /*-----------------------------------------------------------------------------*/
+
+        public ObservableCollection<Group> Groups { get; set; }
+
         #region Номер выбранной вкладки
 
         private int _selectedPageIndex;
@@ -25,7 +31,6 @@ namespace CV19.ViewModels
         }
 
         #endregion
-
 
         #region Тестовый набор данных для визуализации графиков
 
@@ -63,6 +68,7 @@ namespace CV19.ViewModels
             set => Set(ref _status, value);
         }
         #endregion
+        /*-----------------------------------------------------------------------------*/
 
         #region Команды
 
@@ -94,6 +100,8 @@ namespace CV19.ViewModels
 
         #endregion
 
+        /*-----------------------------------------------------------------------------*/
+
         public MainWindowViewModel()
         {
             #region Команды
@@ -115,6 +123,27 @@ namespace CV19.ViewModels
             }
 
             TestDataPoints = dataPoints;
+
+            var studentIndex = 1;
+
+            var students = Enumerable.Range(1, 10).Select(i => new Student
+            {
+                Name = $"name {studentIndex}",
+                Surname = $"Surname {studentIndex}",
+                Patronymic = $"Patronymic {studentIndex++}",
+                Birthday = DateTime.Now,
+                Rating =0
+            });
+
+            var groups = Enumerable.Range(1, 20).Select(i => new Group
+            {
+                Name = $"Группа {i}",
+                Students = new ObservableCollection<Student>(students)
+            });
+
+            Groups = new ObservableCollection<Group>(groups);
+
+
         }
     }
 }
