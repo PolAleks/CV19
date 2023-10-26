@@ -65,8 +65,15 @@
                     <GroupBox Header="Группы" Grid.Column="0" Grid.ColumnSpan="2">
                         <DockPanel>
                             <UniformGrid DockPanel.Dock="Bottom" Rows="1" Margin="0,3">
-                                <Button Content="Добавить" Margin="0,0,3,0" Command="{Binding CreateGroupCommand}"/>
-                                <Button Content="Удалить" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding SelectedGroup}"/>
+                                <UniformGrid.Resources>
+                                    <Style x:Key="ButtonStyle" TargetType="Button">
+                                        <Setter Property="Margin" Value="3,0" />
+                                        <Setter Property="Padding" Value="3,5" />
+                                        <Setter Property="Background" Value="White" />
+                                    </Style>
+                                </UniformGrid.Resources>
+                                <Button Content="Добавить" Style="{StaticResource ButtonStyle}" Command="{Binding CreateGroupCommand}"/>
+                                <Button Content="Удалить" Style="{StaticResource ButtonStyle}" Command="{Binding DeleteGroupCommand}" CommandParameter="{Binding SelectedGroup}"/>
                             </UniformGrid>
                             <ListBox ItemsSource="{Binding Groups}" 
                                      SelectedIndex="0"
@@ -75,7 +82,7 @@
                                     <DataTemplate DataType="decanat:Group">
                                         <StackPanel Orientation="Horizontal">
                                             <TextBlock Text="{Binding Name}"/>
-                                            <TextBlock Text="{Binding Students.Count, StringFormat= [Студентов: {0}]}" Margin="5,0,0,0"/>
+                                            <TextBlock Text="{Binding Students.Count, StringFormat=[Студентов: {0}]}" Margin="5,0,0,0"/>
                                         </StackPanel>
                                     </DataTemplate>
                                 </ListBox.ItemTemplate>
