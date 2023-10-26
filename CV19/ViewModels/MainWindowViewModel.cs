@@ -92,7 +92,7 @@ namespace CV19.ViewModels
         #region Команды
 
         // Реализация команды закрытия приложения через LambdaCommand
-        #region CloseApplicationCommand
+        #region CloseApplicationCommand - закрытие приложения
         public ICommand CloseApplicationCommand { get; }
 
         private void OnCloseApplicationCommandExecuted(object p)
@@ -103,7 +103,7 @@ namespace CV19.ViewModels
         private bool CanCloseApplicationCommandExecute(object p) => true;
         #endregion
 
-        #region
+        #region ChangeTabIndexCommand - переключение между вкладками
 
         public ICommand ChangeTabIndexCommand { get; }
 
@@ -115,6 +115,42 @@ namespace CV19.ViewModels
             SelectedPageIndex += Convert.ToInt32(p);
         }
 
+        #endregion
+
+        #region CreateGroupCommand - создание группы
+        public ICommand CreateGroupCommand { get; } 
+
+        private bool CanCreateGroupCommandExecute(object p) => true;
+
+        private void OnCreateGroupCommandExecuted(object p)
+        {
+            var groupMaxIndex = Groups.Count + 1;
+            var newGroup = new Group
+            {
+                Name = $"Группа {groupMaxIndex}",
+                Students = new ObservableCollection<Student>()
+            };
+
+            Groups.Add(newGroup);
+        }
+
+        #endregion
+
+        #region DeleteGroupCommand - удаление группы
+        public ICommand DeleteGroupCommand { get; }
+
+        private bool CanDeleteGroupCommandExecute(object p) => p is Group group && Groups.Contains(group);
+        
+        private void OnDeleteGroupCommandExecuted(object p)
+        {
+            if (!(p is Group group)) return;
+
+            var groupIndex = Groups.IndexOf(group);
+            Groups.Remove(group);
+
+            if(groupIndex < Groups.Count)
+                SelectedGroup = Groups[groupIndex];
+        }
         #endregion
 
         #endregion
@@ -129,6 +165,12 @@ namespace CV19.ViewModels
 
             // Команда на переключение между вкладками
             ChangeTabIndexCommand = new LambdaCommand(OnChangeTabIndexCommandExecuted, CanChangeTabIndexCommandExecute);
+
+            // Команда на создание новой группы
+            CreateGroupCommand = new LambdaCommand(OnCreateGroupCommandExecuted, CanCreateGroupCommandExecute);
+
+            // Команда на удаление группы
+            DeleteGroupCommand = new LambdaCommand(OnDeleteGroupCommandExecuted, CanDeleteGroupCommandExecute);
 
             #endregion
 
